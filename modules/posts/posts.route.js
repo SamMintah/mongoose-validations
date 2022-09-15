@@ -7,12 +7,20 @@ const {
   deletePost
  
 } = require("./posts.controller");
+const {authRequired} =require("../middlewares/authRequired")
 
 
 const postRouter = router();
 
-postRouter.route("/").get(getPosts).post(createPost);
-postRouter.route("/:postId").patch(updatePost).delete(deletePost).get(getPost);
+postRouter.route("/")
+  .all(authRequired)
+  .get(getPosts)
+  .post(createPost);
+postRouter.route("/:postId")
+  .all(authRequired)
+  .patch(updatePost)
+  .delete(deletePost)
+  .get(getPost);
 
-module.exports = postRouter;
+module.exports = {postRouter};
 
